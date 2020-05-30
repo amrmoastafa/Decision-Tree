@@ -1,11 +1,12 @@
 import numpy as np
 import pandas as pd
 
-import matplotlib.pyplot as plt
-import seaborn as sns
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 from Tree_Node import Node, BinaryTree
 import random
 from pprint import pprint
+from mydict import dictionary
 
 import pydot
 import os
@@ -45,24 +46,13 @@ def classify_data(data):
 
  #potential splits
 def get_potential_splits(data):
-    
-    potential_splits = {}
+    potential_splits = dictionary()
     _, n_columns = data.shape
-    for column_index in range(n_columns - 1):        # excluding the last column which is the label
-        potential_splits[column_index] = []
+    for column_index in range(n_columns - 1):
         values = data[:, column_index]
         unique_values = np.unique(values)
+        potential_splits.add(column_index, unique_values)
 
-#         for index in range(len(unique_values)):
-#             if index != 0:
-#                 current_value = unique_values[index]
-#                 previous_value = unique_values[index - 1]
-#                 potential_split = (current_value + previous_value) / 2
-                
-#                 potential_splits[column_index].append(potential_split)
-
-        potential_splits[column_index] = unique_values
-    
     return potential_splits
 
  #split data
@@ -229,7 +219,7 @@ def decision_tree_algorithm_with_nodes(df, current_node, counter=0, min_samples=
         #     TreeOfNodes.insert(no_node, 'no')
 
         return current_node
-tree = decision_tree_algorithm_with_nodes(train_df, max_depth=5)
+#tree = decision_tree_algorithm_with_nodes(train_df, max_depth=5)
 
 my_path = []
 def classify_example_with_Nodes(example,tree):
