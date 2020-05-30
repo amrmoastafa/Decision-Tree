@@ -70,7 +70,7 @@ def calculate_entropy(data):
      
     return entropy
 
-def calculate_overall_entropy(data_below, data_above):
+def get_overall_entropy(data_below, data_above):
     
     n = len(data_below) + len(data_above)
     p_data_below = len(data_below) / n
@@ -84,19 +84,19 @@ def calculate_overall_entropy(data_below, data_above):
 
  #determinig best split
 def determine_best_split(data, potential_splits):
-    
     overall_entropy = 9999
-    for column_index in potential_splits:
-        
-        for value in potential_splits[column_index]:
-            data_below, data_above = split_data(data, split_column=column_index, split_value=value)
-            current_overall_entropy = calculate_overall_entropy(data_below, data_above)
+    _, n_columns = data.shape
+    for column_index in range(n_columns - 1):
+        # print(COLUMN_HEADERS[column_index], '-', len(np.unique(data[:, column_index])))
+        for value in potential_splits.get(column_index):
+            data_equal, data_not_equal = split_data(data, split_column=column_index, split_value=value)
+            current_overall_entropy = get_overall_entropy(data_equal, data_not_equal)
 
             if current_overall_entropy <= overall_entropy:
                 overall_entropy = current_overall_entropy
                 best_split_column = column_index
                 best_split_value = value
-    
+
     return best_split_column, best_split_value
 
 
