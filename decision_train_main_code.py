@@ -44,7 +44,7 @@ def classify_data(data):
     return classification
 
  #potential splits
- def get_potential_splits(data):
+def get_potential_splits(data):
     
     potential_splits = {}
     _, n_columns = data.shape
@@ -66,7 +66,7 @@ def classify_data(data):
     return potential_splits
 
  #split data
- def split_data(data, split_column, split_value):
+def split_data(data, split_column, split_value):
     
     split_column_values = data[:, split_column]
     data_below = data[split_column_values == split_value]
@@ -75,7 +75,7 @@ def classify_data(data):
     return data_below, data_above
 
  #calculating entropy
- def calculate_entropy(data):
+def calculate_entropy(data):
     
     label_column = data[:, -1]
     _, counts = np.unique(label_column, return_counts=True)
@@ -85,7 +85,7 @@ def classify_data(data):
      
     return entropy
 
- def calculate_overall_entropy(data_below, data_above):
+def calculate_overall_entropy(data_below, data_above):
     
     n = len(data_below) + len(data_above)
     p_data_below = len(data_below) / n
@@ -98,7 +98,7 @@ def classify_data(data):
 
 
  #determinig best split
- def determine_best_split(data, potential_splits):
+def determine_best_split(data, potential_splits):
     
     overall_entropy = 9999
     for column_index in potential_splits:
@@ -229,41 +229,37 @@ def decision_tree_algorithm_with_nodes(df, current_node, counter=0, min_samples=
         #     TreeOfNodes.insert(no_node, 'no')
 
         return current_node
- tree = decision_tree_algorithm_with_nodes(train_df, max_depth=5)
+tree = decision_tree_algorithm_with_nodes(train_df, max_depth=5)
 
- def classify_example(example, tree):
-    question = list(tree.keys())[0]
-    feature_name, comparison_operator, value = question.split()
+my_path = []
+def classify_example_with_Nodes(example,tree):
 
-    # ask question
-    if comparison_operator == "=":
-        print(feature_name)
-        print(str(example[feature_name]))
-        #if example[feature_name] <= float(value):
-        if str(example[feature_name]) == value:
-            answer = tree[question][0]
-        else:
-            answer = tree[question][1]
-
-    # base case
-    if not isinstance(answer, dict):
-        return answer
-    
-    # recursive part
+    if tree.left == None and tree.right == None:
+        #base case of classification +ve or -Ve
+        my_path.append(tree.value)
+        return tree.value
+        
     else:
-        residual_tree = answer
-        print(residual_tree)
-        return classify_example(example, residual_tree)
-
-classify_example(example, tree)
+        #it's a question 
+        if example[tree.value] == 1: #a no answer
+            my_path.append(tree.value)
+            return classify_example_with_Nodes(example,tree.right)
+        
+        elif example[tree.value]==0: #a yes answer
+            my_path.append(tree.value)
+            return classify_example_with_Nodes(example,tree.left)
 
 def calculate_accuracy(df, tree):
-
-    df["classification"] = df.apply(classify_example, axis=1, args=(tree,))
-    df["classification_correct"] = df["classification"] == df["label"]
-    
-    accuracy = df["classification_correct"].mean()
-    
-    return accuracy
+    #Tasnim commented this
+    #df["classification"] = df.apply(classify_example_with_Nodes, axis=1, args=(tree, 1,))
+    #applying the classification function on the given df
+    df["classification"] = df.apply(classify_example_with_Nodes, axis=1, args=(tree,))
+    #writing the result of classification in a file
+    df["classification"].to_csv('classify.csv', encoding='utf-8')
+    #check if we want to calculate the accuracy or not (just printing in a file) by checking if the label column exists or not
+    if 'label' in df:
+        df["classification_correct"] = df["classification"] == df["label"]
+        accuracy = df["classification_correct"].mean()
+        return accuracy
 
 accuracy = calculate_accuracy(test_df, tree)
