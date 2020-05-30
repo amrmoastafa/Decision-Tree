@@ -1,16 +1,11 @@
 import numpy as np
 import pandas as pd
-
-#import matplotlib.pyplot as plt
-#import seaborn as sns
 from Tree_Node import Node, BinaryTree
-import random
-from pprint import pprint
 from mydict import dictionary
 
 import pydot
 import os
-# from PIL import Image
+
 import graphviz
 from graphviz import Source
 Tree_plot = graphviz.Digraph('Tree',format='png')
@@ -104,60 +99,6 @@ def determine_best_split(data, potential_splits):
     
     return best_split_column, best_split_value
 
- #main algorithm
-#  def decision_tree_algorithm(df, counter=0, min_samples=2, max_depth=5):
-    
-#     # data preparations
-#     if counter == 0:
-#         global COLUMN_HEADERS
-#         COLUMN_HEADERS = df.columns
-#         data = df.values
-#     else:
-#         data = df           
-    
-    
-#     # base cases
-#     if (check_purity(data)) or (len(data) < min_samples) or (counter == max_depth):
-#         classification = classify_data(data)
-        
-#         return classification
-
-    
-#     # recursive part
-#     else:    
-#         counter += 1
-
-#         # helper functions 
-#         potential_splits = get_potential_splits(data)
-#         if len(potential_splits)==0:
-#             classification = classify_data(data)
-#             return classification
-        
-#         split_column, split_value = determine_best_split(data, potential_splits)
-#         data_below, data_above = split_data(data, split_column, split_value)
-        
-#         # instantiate sub-tree
-#         feature_name = COLUMN_HEADERS[split_column]
-#         feature_name
-#         #node *mynode= new node(feature_name)
-#         #question = "{} <= {}".format(feature_name, split_value)
-#         question = "{} = {}".format(feature_name, split_value)
-#         sub_tree = {question: []}
-        
-#         # find answers (recursion)
-#         yes_answer = decision_tree_algorithm(data_below, counter, min_samples, max_depth)
-#         no_answer = decision_tree_algorithm(data_above, counter, min_samples, max_depth)
-        
-#         # If the answers are the same, then there is no point in asking the qestion.
-#         # This could happen when the data is classified even though it is not pure
-#         # yet (min_samples or max_depth base cases).
-#         if yes_answer == no_answer:
-#             sub_tree = yes_answer
-#         else:
-#             sub_tree[question].append(yes_answer)
-#             sub_tree[question].append(no_answer)
-        
-#         return sub_tree
 
 def decision_tree_algorithm_with_nodes(df, current_node, counter=0, min_samples=2, max_depth=5):
     # data preparations
