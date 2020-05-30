@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from IntegratedCode import CalculateAccuracy, DecisionTreeAlgorithmWithNodes, my_path
+from decision_train_main_code import CalculateAccuracy, DecisionTreeAlgorithmWithNodes, my_path
 from Tree_Node import Node, BinaryTree
 import numpy as np
 import pandas as pd
