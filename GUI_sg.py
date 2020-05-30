@@ -52,3 +52,88 @@ first_row = ['contains_No', 'contains_Please', 'contains_Thank', 'contains_apolo
 with open('input.csv', 'w+', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(first_row)
+while True:
+    event, values = window.read()
+
+    if event in (sg.WIN_CLOSED, 'Quit'):
+        print(event, values)
+        print(values)
+        break
+    elif event is 'Show Tree':
+        imageViewerFromCommandLine = {'linux': 'xdg-open',
+                                      'win32': 'explorer',
+                                      'darwin': 'open'}[sys.platform]
+        subprocess.run([imageViewerFromCommandLine, 'Tree.gv.png'])
+        print('show')
+    elif event is 'Write a review':
+        Review_text = sg.popup_get_text('Enter your review')
+        if Review_text is not None:
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("\nUser entered a review : "+Review_text, text_color='black')
+            Review_text = String_filter(Review_text, 0)
+            with open('input.csv', 'w+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(first_row)
+            rev = int(Review_text)
+            print(len(Review_text))
+            arr = list(Review_text)
+            print(arr)
+            fl = open('input.csv', 'a+')
+            writer = csv.writer(fl)
+            writer.writerow(arr)
+            fl.close()
+            print("done")
+            review_flag = 1
+    elif event is 'Show accuracy':
+        if list(values.values())[2] is '':
+            depth = 5
+        else:
+            depth = int(list(values.values())[2])
+        Tree_plot = graphviz.Digraph('Tree', format='png')
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print(" ", text_color='black')
+        window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("Starting the execution at : " + current_time, text_color='black')
+
+        Train_path = list(values.values())[0]
+        print("Train path : " + Train_path)
+        Test_path = list(values.values())[1]
+        print("Test_path :" + Test_path)
+
+        test_df = pd.read_csv(Test_path)
+        train_df = pd.read_csv(Train_path)
+        train_df = train_df.drop("reviews.text", axis=1)
+        train_df = train_df.rename(columns={"rating": "label"})
+        test_df = test_df.drop("reviews.text", axis=1)
+        test_df = test_df.rename(columns={"rating": "label"})
+
+        TreeOfNodes = BinaryTree()
+        TreeOfNodes.root = decision_tree_algorithm_with_nodes(train_df, TreeOfNodes.root, max_depth=depth)
+        acc = calculate_accuracy(test_df, TreeOfNodes.root) * 100
+        acc = round(acc, 3)
+        print(acc)
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("accuracy is: " + str(acc) + '%', text_color='black')
+        window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("Execution Finished At : " + current_time, text_color='black')
+        def draw_tree(leftnode = TreeOfNodes.root.left, node = TreeOfNodes.root, rightnode = TreeOfNodes.root.right):
+
+            if node.right is not None or node.left is not None:
+                if node.right.value == node.left.value:
+                    # print(node.right.value)
+                    Tree_plot.node(node.right.value+node.value, node.right.value)
+                    Tree_plot.edge(node.value, node.right.value+node.value, label="Yes or No")
+                else:
+                    # print('contains_'+node.value.split('contains_')[1])
+                    Tree_plot.node(node.value,'contains_'+node.value.split('contains_')[1])
+                    Tree_plot.node(node.left.value + node.value, node.left.value)
+                    Tree_plot.node(node.right.value + node.value ,node.right.value)
+
+                    Tree_plot.edge(node.value,node.right.value + node.value,label="Yes")
+                    Tree_plot.edge(node.value,node.left.value + node.value,label= "No")
+                    node.left.value = node.left.value + node.value
+                    node.right.value = node.right.value + node.value
+                    draw_tree(leftnode = leftnode.left, node= leftnode,rightnode = leftnode.right)
+                    draw_tree(leftnode = rightnode.left, node= rightnode,rightnode = rightnode.right)
+
+        draw_tree()
+        Tree_plot.render()
