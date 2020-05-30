@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from IntegratedCode import calculate_accuracy, decision_tree_algorithm_with_nodes, my_path
+from decision_train_main_code import calculate_accuracy, decision_tree_algorithm_with_nodes, my_path
 from Tree_Node import Node, BinaryTree
 import numpy as np
 import pandas as pd
@@ -137,3 +137,72 @@ while True:
 
         draw_tree()
         Tree_plot.render()
+    elif event is 'Classify':
+
+        if list(values.values())[2] is '':
+            depth = 5
+        else:
+            depth = int(list(values.values())[2])
+        Tree_plot = graphviz.Digraph('Tree', format='png')
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print(" ", text_color='black')
+        window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("Starting the execution at : " + current_time, text_color='black')
+        Train_path = list(values.values())[0]
+        print("Train path : " + Train_path)
+
+        if review_flag == 1:  # if he entered a text
+            my_path.clear()
+            print("here review")
+            Test_path = "input.csv"
+            Train_path = "sample_train.csv"
+            test_df = pd.read_csv(Test_path)
+            train_df = pd.read_csv(Train_path)
+            train_df = train_df.drop("reviews.text", axis=1)
+            train_df = train_df.rename(columns={"rating": "label"})
+            review_flag = 0
+            TreeOfNodes = BinaryTree()
+            TreeOfNodes.root = decision_tree_algorithm_with_nodes(train_df, TreeOfNodes.root, max_depth=depth)
+            acc = calculate_accuracy(test_df, TreeOfNodes.root)
+            #acc = round(acc, 3)
+            classif = pd.read_csv("classify.csv")
+            print(classif)
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print(classif["classification"], text_color='black')
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("you can check classify.csv file", text_color='black')
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("Execution Finished At : " + current_time, text_color='black')
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("The path of the review:" , text_color='black')
+            final_path= ""
+            for i in my_path:
+                if i == "Positive" or i == "Negative":
+                    final_path+=i
+                else:
+                    final_path+=i+"->"
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print(final_path, text_color='black')
+            my_path.clear()
+
+        else:
+            Train_path = list(values.values())[0]
+            ("Train path : " + Train_path)
+            Test_path = list(values.values())[1]
+            print("Test_path :" + Test_path)
+
+            test_df = pd.read_csv(Test_path)
+            train_df = pd.read_csv(Train_path)
+            train_df = train_df.drop("reviews.text", axis=1)
+            train_df = train_df.rename(columns={"rating": "label"})
+            test_df = test_df.drop("reviews.text", axis=1)
+            test_df = test_df.rename(columns={"rating": "label"})
+
+            TreeOfNodes = BinaryTree()
+            TreeOfNodes.root = decision_tree_algorithm_with_nodes(train_df, TreeOfNodes.root, max_depth=7)
+            acc = calculate_accuracy(test_df,TreeOfNodes.root)
+            # print(acc)
+            # acc = round(acc, 3)
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("check classify.csv file", text_color='black')
+            window['-OUTPUT-' + sg.WRITE_ONLY_KEY].print("Execution Finished At : " + current_time, text_color='black')
+
+window.close()

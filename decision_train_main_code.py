@@ -13,12 +13,12 @@ Tree_plot = graphviz.Digraph('Tree',format='png')
 G = pydot.Dot(graph_type="digraph")
 
 #loading and preparing data
-train_df = pd.read_csv("sample_train.csv")
-test_df = pd.read_csv("sample_dev.csv")
-test_df = test_df.drop("reviews.text", axis=1)
-test_df = test_df.rename(columns={"rating":"label"})
-train_df = train_df.drop("reviews.text", axis=1)
-train_df = train_df.rename(columns={"rating":"label"})
+# train_df = pd.read_csv("sample_train.csv")
+# test_df = pd.read_csv("sample_dev.csv")
+# test_df = test_df.drop("reviews.text", axis=1)
+# test_df = test_df.rename(columns={"rating":"label"})
+# train_df = train_df.drop("reviews.text", axis=1)
+# train_df = train_df.rename(columns={"rating":"label"})
 
 #check purity
 def check_purity(data):
@@ -87,7 +87,7 @@ def determine_best_split(data, potential_splits):
     
     overall_entropy = 9999
     for column_index in potential_splits:
-        #print(COLUMN_HEADERS[column_index], '-', len(np.unique(data[:, column_index])))
+        
         for value in potential_splits[column_index]:
             data_below, data_above = split_data(data, split_column=column_index, split_value=value)
             current_overall_entropy = calculate_overall_entropy(data_below, data_above)
@@ -155,9 +155,6 @@ def decision_tree_algorithm_with_nodes(df, current_node, counter=0, min_samples=
         if current_node.right == current_node.left:
             current_node.value = current_node.right.value
 
-        # else:
-        #     TreeOfNodes.insert(yes_node,'yes')
-        #     TreeOfNodes.insert(no_node, 'no')
 
         return current_node
 #tree = decision_tree_algorithm_with_nodes(train_df, max_depth=5)
@@ -181,9 +178,7 @@ def classify_example_with_Nodes(example,tree):
             return classify_example_with_Nodes(example,tree.left)
 
 def calculate_accuracy(df, tree):
-    #Tasnim commented this
-    #df["classification"] = df.apply(classify_example_with_Nodes, axis=1, args=(tree, 1,))
-    #applying the classification function on the given df
+    
     df["classification"] = df.apply(classify_example_with_Nodes, axis=1, args=(tree,))
     #writing the result of classification in a file
     df["classification"].to_csv('classify.csv', encoding='utf-8')
@@ -193,4 +188,3 @@ def calculate_accuracy(df, tree):
         accuracy = df["classification_correct"].mean()
         return accuracy
 
-accuracy = calculate_accuracy(test_df, tree)
