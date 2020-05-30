@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from decision_train_main_code import calculate_accuracy, decision_tree_algorithm_with_nodes, my_path
+from IntegratedCode import CalculateAccuracy, DecisionTreeAlgorithmWithNodes, my_path
 from Tree_Node import Node, BinaryTree
 import numpy as np
 import pandas as pd
@@ -83,6 +83,8 @@ while True:
             fl.close()
             print("done")
             review_flag = 1
+
+
     elif event is 'Show accuracy':
         if list(values.values())[2] is '':
             depth = 5
@@ -107,8 +109,8 @@ while True:
         test_df = test_df.rename(columns={"rating": "label"})
 
         TreeOfNodes = BinaryTree()
-        TreeOfNodes.root = decision_tree_algorithm_with_nodes(train_df, TreeOfNodes.root, max_depth=depth)
-        acc = calculate_accuracy(test_df, TreeOfNodes.root) * 100
+        TreeOfNodes.root = DecisionTreeAlgorithmWithNodes(train_df, TreeOfNodes.root, max_depth=depth)
+        acc = CalculateAccuracy(test_df, TreeOfNodes.root) * 100
         acc = round(acc, 3)
         print(acc)
         now = datetime.now()
@@ -137,6 +139,7 @@ while True:
 
         draw_tree()
         Tree_plot.render()
+
     elif event is 'Classify':
 
         if list(values.values())[2] is '':
@@ -162,8 +165,8 @@ while True:
             train_df = train_df.rename(columns={"rating": "label"})
             review_flag = 0
             TreeOfNodes = BinaryTree()
-            TreeOfNodes.root = decision_tree_algorithm_with_nodes(train_df, TreeOfNodes.root, max_depth=depth)
-            acc = calculate_accuracy(test_df, TreeOfNodes.root)
+            TreeOfNodes.root = DecisionTreeAlgorithmWithNodes(train_df, TreeOfNodes.root, max_depth=depth)
+            acc = CalculateAccuracy(test_df, TreeOfNodes.root)
             #acc = round(acc, 3)
             classif = pd.read_csv("classify.csv")
             print(classif)
@@ -196,8 +199,8 @@ while True:
             test_df = test_df.rename(columns={"rating": "label"})
 
             TreeOfNodes = BinaryTree()
-            TreeOfNodes.root = decision_tree_algorithm_with_nodes(train_df, TreeOfNodes.root, max_depth=7)
-            acc = calculate_accuracy(test_df,TreeOfNodes.root)
+            TreeOfNodes.root = DecisionTreeAlgorithmWithNodes(train_df, TreeOfNodes.root, max_depth=7)
+            acc = CalculateAccuracy(test_df, TreeOfNodes.root)
             # print(acc)
             # acc = round(acc, 3)
             now = datetime.now()
