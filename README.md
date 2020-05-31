@@ -10,7 +10,8 @@ Our project can:
 
 
 And here are some screen shots demonstrating the functionalities of our GUI:
-\n• The user can select train data (1), test or dev data (2) then check the accuracy of our tree (4) based on different input depth (3) that he may select.
+
+• The user can select train data (1), test or dev data (2) then check the accuracy of our tree (4) based on different input depth (3) that he may select.
 ![](images/1.jpeg)
 
 ![](images/2.jpeg)
