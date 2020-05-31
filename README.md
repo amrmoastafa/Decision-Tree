@@ -15,6 +15,8 @@ And here are some screen shots demonstrating the functionalities of our GUI:
 
 ![](images/1.jpeg)
 
+  • The GUI comes with an activity log to inform the user of the kind of operations taking place when he clicks a button , here the log shows a message informing the user of the result of the training of the decision tree and its output accuracy.
+
 ![](images/2.jpeg)
 
 ![](images/3.jpeg)
