@@ -1,9 +1,10 @@
+# Dependencies
 import numpy as np
-import pandas as pd
 import io
 from mydict import dictionary
 from Tree_Node import Node, BinaryTree
 import random
+import pandas as pd
 from pprint import pprint
 import pydot
 import os
@@ -14,6 +15,9 @@ Tree_plot = graphviz.Digraph('Tree',format='png')
 
 G = pydot.Dot(graph_type="digraph")
 
+
+# first, this function is used to make sure that the data after splits will be pure to continue with the next step in
+# the decision treee algorithm
 def CheckPurity(data):
     label_column = data[:, -1]
     unique_classes = np.unique(label_column)
@@ -22,7 +26,8 @@ def CheckPurity(data):
     else:
         return False
 
-
+#this function is used to work on data classification where it classify data base on
+# majority class
 def DataClassificationFunction(data):
     label_column = data[:, -1]
     unique_classes, counts_unique_classes = np.unique(label_column, return_counts=True)
@@ -34,6 +39,7 @@ def DataClassificationFunction(data):
     return classification
 
 
+# this function is a part of the splitting step that aids in the decision tree algorithm
 def Split_Function(data, split_column, split_value):
     split_column_values = data[:, split_column]
 
@@ -42,7 +48,7 @@ def Split_Function(data, split_column, split_value):
 
     return data_equal, data_notequal
 
-
+# this function is a part of the splitting step that aids in the decision tree algorithm
 def Potential_splits(data):
     potential_splits = dictionary()
     _, n_columns = data.shape
@@ -53,7 +59,8 @@ def Potential_splits(data):
 
     return potential_splits
 
-
+# To calculate information gain we need to claculate entropy, there are several other ways to get information gain as gini index
+# and some other methods
 def GetEntropy(data):
     # sum of prob of all classes * -log(prob)
     rate_col = data[:, -1]
@@ -63,7 +70,7 @@ def GetEntropy(data):
     entropy = sum(prob * -np.log2(prob))
     return entropy
 
-
+#this also use the above function
 def GetOverallEntropy(data_equal, data_not_equal):
     data_point = len(data_equal) + len(data_not_equal)
     p_data_equal = len(data_equal) / data_point
@@ -72,7 +79,7 @@ def GetOverallEntropy(data_equal, data_not_equal):
 
     return overall_entropy
 
-
+# this also aids in the step of information gain step
 def Estimate_Best_Split(data, potential_splits):
     overall_entropy = 10000
     _, n_columns = data.shape
@@ -91,7 +98,7 @@ def Estimate_Best_Split(data, potential_splits):
 
 
 
-
+# this is our main algorithm modified to use tree nodes
 def DecisionTreeAlgorithmWithNodes(df, current_node, counter=0, min_samples=2, max_depth=5):
     # data preparations
     if counter == 0:
@@ -159,6 +166,7 @@ def DecisionTreeAlgorithmWithNodes(df, current_node, counter=0, min_samples=2, m
 first_time = 1
 my_path = []
 #classify without drawing
+#this also use tree nodes in its implementation
 def ClassifyExampleWithNodes(example, tree):
 
     if tree.left == None and tree.right == None:
@@ -189,3 +197,4 @@ def CalculateAccuracy(df, tree):
         df["classification_correct"] = df["classification"] == df["label"]
         accuracy = df["classification_correct"].mean()
         return accuracy
+# end of code
