@@ -6,5 +6,7 @@ Our project can:
 2. Parse raw text and turn it into a csv file to classify it
 3. Calculate the accuracy of a pre-known classification dataset
 4. Set the depth(constraint in decision tree) of the decision tree
-5. Show the trained model of the tree
+5. Show the trained model of the tree.
+
+
 And here's our GUI:
