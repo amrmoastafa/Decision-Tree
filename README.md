@@ -24,17 +24,25 @@ And here are some screen shots demonstrating the functionalities of our GUI:
   <img src="images/2.jpeg">
 </p>
 
+  • The user can also select show tree to see the output tree of the given depth and its branches.
+
 <p align="center">
   <img width = "1000" height="600" src="images/3.jpeg">
 </p>
+
+  • If you want to enter a review , you can click the write a review button and write your review , either in english or in 0s and 1s , we handled both cases , then the GUI will use the generated tree to classify your review . 
 
 <p align="center">
   <img src="images/4.jpeg">
 </p>
 
+  • Furthermore , the GUI will print the path it took to make this classification and print the classification output.
+
 <p align="center">
   <img src="images/5.jpeg">
 </p>
+
+  • This is a sample output based on a 3 layers' depth tree shown.
 
 <p align="center">
   <img src="images/6.jpeg">
