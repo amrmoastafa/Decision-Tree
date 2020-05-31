@@ -74,10 +74,10 @@ def GetOverallEntropy(data_equal, data_not_equal):
 
 
 def Estimate_Best_Split(data, potential_splits):
-    overall_entropy = 9999
+    overall_entropy = 10000
     _, n_columns = data.shape
     for column_index in range(n_columns - 1):
-        # print(COLUMN_HEADERS[column_index], '-', len(np.unique(data[:, column_index])))
+        
         for value in potential_splits.get(column_index):
             data_equal, data_not_equal = Split_Function(data, split_column=column_index, split_value=value)
             current_overall_entropy = GetOverallEntropy(data_equal, data_not_equal)
