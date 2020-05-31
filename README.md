@@ -20,12 +20,22 @@ And here are some screen shots demonstrating the functionalities of our GUI:
 
   • The GUI comes with an activity log to inform the user of the kind of operations taking place when he clicks a button , here the log shows a message informing the user of the result of the training of the decision tree and its output accuracy.
 
-![](images/2.jpeg)
+<p align="center">
+  <img src="images/2.jpeg">
+</p>
 
-![](images/3.jpeg)
+<p align="center">
+  <img src="images/3.jpeg">
+</p>
 
-![](images/4.jpeg)
+<p align="center">
+  <img src="images/4.jpeg">
+</p>
 
-![](images/5.jpeg)
+<p align="center">
+  <img src="images/5.jpeg">
+</p>
 
-![](images/6.jpeg)
+<p align="center">
+  <img src="images/6.jpeg">
+</p>
