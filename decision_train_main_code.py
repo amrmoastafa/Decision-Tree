@@ -20,8 +20,8 @@ G = pydot.Dot(graph_type="digraph")
 # the decision treee algorithm
 def CheckPurity(data):
     label_column = data[:, -1]
-    unique_classes = np.unique(label_column)
-    if len(unique_classes) == 1:
+    unique_classific = np.unique(label_column)
+    if len(unique_classific) == 1:
         return True
     else:
         return False
@@ -34,9 +34,9 @@ def DataClassificationFunction(data):
 
     index = counts_unique_classes.argmax()
     # return positive or negative based on majority
-    classification = unique_classes[index]
+    classific = unique_classes[index]
 
-    return classification
+    return classific
 
 
 # this function is a part of the splitting step that aids in the decision tree algorithm
@@ -50,14 +50,14 @@ def Split_Function(data, split_column, split_value):
 
 # this function is a part of the splitting step that aids in the decision tree algorithm
 def Potential_splits(data):
-    potential_splits = dictionary()
+    splits = dictionary()
     _, n_columns = data.shape
     for column_index in range(n_columns - 1):
         values = data[:, column_index]
         unique_values = np.unique(values)
-        potential_splits.add(column_index, unique_values)
+        splits.add(column_index, unique_values)
 
-    return potential_splits
+    return splits
 
 # To calculate information gain we need to claculate entropy, there are several other ways to get information gain as gini index
 # and some other methods
@@ -87,10 +87,10 @@ def Estimate_Best_Split(data, potential_splits):
         
         for value in potential_splits.get(column_index):
             data_equal, data_not_equal = Split_Function(data, split_column=column_index, split_value=value)
-            current_overall_entropy = GetOverallEntropy(data_equal, data_not_equal)
+            current_entropy = GetOverallEntropy(data_equal, data_not_equal)
 
-            if current_overall_entropy <= overall_entropy:
-                overall_entropy = current_overall_entropy
+            if current_entropy <= overall_entropy:
+                overall_entropy = current_entropy
                 best_split_column = column_index
                 best_split_value = value
 
@@ -123,15 +123,15 @@ def DecisionTreeAlgorithmWithNodes(df, current_node, counter=0, min_samples=2, m
         counter = counter + 1
 
         # helper functions
-        potential_splits = Potential_splits(data)
+        splits = Potential_splits(data)
         # get potential splits return a dicitonar of columns with unique values in each column
-        if potential_splits.counter == 0:
+        if splits.counter == 0:
             classification = DataClassificationFunction(data)
             current_node = Node(classification)
             print(current_node.value)
             return current_node
 
-        split_column, split_value = Estimate_Best_Split(data, potential_splits)
+        split_column, split_value = Estimate_Best_Split(data,splits)
         data_equal, data_not_equal = Split_Function(data, split_column, split_value)
 
         # instantiate sub-tree
