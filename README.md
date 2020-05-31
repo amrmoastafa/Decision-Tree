@@ -1,5 +1,5 @@
-# Decision Tree Algorithm from scratch
-This project is a part of our coursework in Data Structure and algorithms course.
+## Decision Tree Algorithm from scratch
+#This project is a part of our coursework in Data Structure and algorithms course.
 Here's the functionalities of our project:
 Our project can:
 1. Classify any ready csv dataset after training our model
