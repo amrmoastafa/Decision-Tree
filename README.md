@@ -25,7 +25,7 @@ And here are some screen shots demonstrating the functionalities of our GUI:
 </p>
 
 <p align="center">
-  <img src="images/3.jpeg">
+  <img height="600" src="images/3.jpeg">
 </p>
 
 <p align="center">
