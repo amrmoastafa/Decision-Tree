@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 import io
 from mydict import dictionary
-# import matplotlib.pyplot as plt
-# import seaborn as sns
 from Tree_Node import Node, BinaryTree
 import random
 from pprint import pprint
@@ -92,15 +90,6 @@ def Estimate_Best_Split(data, potential_splits):
     return best_split_column, best_split_value
 
 
-# print(classify_data(train_df[train_df.contains_comfortable == 1].values))
-###data_eq, data_not_eq = split_data(train_df.values, 0, 1)
-# print(get_potential_splits(test_df.values))
-
-###bestcolumn, bestvalue = determine_best_split(train_df.values, get_potential_splits(train_df.values))
-
-# print(bestcolumn)
-
-###TreeOfNodes = BinaryTree()
 
 
 def DecisionTreeAlgorithmWithNodes(df, current_node, counter=0, min_samples=2, max_depth=5):
